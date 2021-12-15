@@ -28,22 +28,18 @@ import datetime
 import warnings
 from collections import OrderedDict
 
-try:
-    from urllib.parse import urlparse
-except ImportError:  # python < 3
-    from urlparse import urlparse
-
+from urllib.parse import urlparse
 from astropy.time import Time
 
 from ligo.segments import segment as Segment
 
 __author__ = 'Duncan Macleod <duncan.macleod@ligo.org>'
 
-daily_cbc = re.compile('\Adaily[\s_-]cbc\Z')
-pycbc_live = re.compile('\Apycbc[\s_-]live\Z')
-kleinewelle = re.compile('\A(kw|kleinewelle)\Z', re.I)
-dmt_omega = re.compile('\Admt([\s_-])?omega\Z', re.I)
-omega = re.compile('\Aomega([\s_-])?(online)?\Z', re.I)
+daily_cbc = re.compile('\\Adaily[\\s_-]cbc\\Z')
+pycbc_live = re.compile('\\Apycbc[\\s_-]live\\Z')
+kleinewelle = re.compile('\\A(kw|kleinewelle)\\Z', re.I)
+dmt_omega = re.compile('\\Admt([\\s_-])?omega\\Z', re.I)
+omega = re.compile('\\Aomega([\\s_-])?(online)?\\Z', re.I)
 channel_delim = re.compile('[:_-]')
 
 OMICRON_O2_EPOCH = 1146873617
@@ -60,7 +56,7 @@ def _file_segment(path):
 
 
 def _as_url(path):
-     return urlparse(os.path.abspath(path), scheme='file').geturl()
+    return urlparse(os.path.abspath(path), scheme='file').geturl()
 
 
 def find_trigger_files(channel, etg, start, end, **kwargs):
@@ -165,7 +161,6 @@ def find_detchar_files(channel, start, end, etg='omicron', ext='xml.gz'):
         tag = etg.upper()
         dirtag = '%s_%s' % (name, tag)
     else:
-        epoch = '*'
         base = os.path.join(os.path.sep, 'home', 'detchar', 'triggers', '*')
         tag = etg.title()
         dirtag = '%s_%s' % (str(channel).split(':', 1)[1], tag)
@@ -212,7 +207,6 @@ def find_kleinewelle_files(channel, start, end, base=None, ext='xml'):
     files : `list` of `str`
         a list of file URLs
     """
-    span = Segment(int(start), int(end))
     ifo, name = _format_channel_name(str(channel)).split('-', 1)
     hoft = name == 'GDS_CALIB_STRAIN'
     site = ifo[0].upper()
@@ -257,7 +251,6 @@ def find_dmt_omega_files(channel, start, end, base=None, ext='xml'):
     files : `list` of `str`
         a list of file URLs
     """
-    span = Segment(int(start), int(end))
     ifo, name = _format_channel_name(str(channel)).split('-', 1)
     hoft = name == 'GDS_CALIB_STRAIN'
     site = ifo[0].upper()
